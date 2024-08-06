@@ -19,53 +19,61 @@ const fromSupabase = async (query) => {
 
 /* supabase integration types
 
-// EXAMPLE TYPES SECTION
-// DO NOT USE TYPESCRIPT
+### flights
 
-### foos
+| name               | type                     | format | required |
+|--------------------|--------------------------|--------|----------|
+| id                 | int8                     | number | true     |
+| created_at         | timestamp with time zone | string | true     |
+| flight_number      | text                     | string | true     |
+| departure_airport  | text                     | string | true     |
+| arrival_airport    | text                     | string | true     |
+| departure_time     | timestamp with time zone | string | true     |
+| arrival_time       | timestamp with time zone | string | true     |
+| airline            | text                     | string | true     |
+| status             | text                     | string | true     |
 
-| name    | type | format | required |
-|---------|------|--------|----------|
-| id      | int8 | number | true     |
-| title   | text | string | true     |
-| date    | date | string | true     |
-
-### bars
-
-| name    | type | format | required |
-|---------|------|--------|----------|
-| id      | int8 | number | true     |
-| foo_id  | int8 | number | true     |  // foreign key to foos
-	
 */
 
-// Example hook for models
+// Hooks for flights table
 
-export const useFoo = ()=> useQuery({
-    queryKey: ['foos'],
-    queryFn: fromSupabase(supabase.from('foos')),
-})
-export const useAddFoo = () => {
+export const useFlights = () => useQuery({
+    queryKey: ['flights'],
+    queryFn: () => fromSupabase(supabase.from('flights').select('*'))
+});
+
+export const useFlightById = (id) => useQuery({
+    queryKey: ['flights', id],
+    queryFn: () => fromSupabase(supabase.from('flights').select('*').eq('id', id).single()),
+    enabled: !!id
+});
+
+export const useAddFlight = () => {
     const queryClient = useQueryClient();
     return useMutation({
-        mutationFn: (newFoo)=> fromSupabase(supabase.from('foos').insert([{ title: newFoo.title }])),
-        onSuccess: ()=> {
-            queryClient.invalidateQueries('foos');
+        mutationFn: (newFlight) => fromSupabase(supabase.from('flights').insert([newFlight])),
+        onSuccess: () => {
+            queryClient.invalidateQueries('flights');
         },
     });
 };
 
-export const useBar = ()=> useQuery({
-    queryKey: ['bars'],
-    queryFn: fromSupabase(supabase.from('bars')),
-})
-export const useAddBar = () => {
+export const useUpdateFlight = () => {
     const queryClient = useQueryClient();
     return useMutation({
-        mutationFn: (newBar)=> fromSupabase(supabase.from('bars').insert([{ foo_id: newBar.foo_id }])),
-        onSuccess: ()=> {
-            queryClient.invalidateQueries('bars');
+        mutationFn: ({ id, ...updateData }) => fromSupabase(supabase.from('flights').update(updateData).eq('id', id)),
+        onSuccess: () => {
+            queryClient.invalidateQueries('flights');
         },
     });
 };
 
+export const useDeleteFlight = () => {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: (id) => fromSupabase(supabase.from('flights').delete().eq('id', id)),
+        onSuccess: () => {
+            queryClient.invalidateQueries('flights');
+        },
+    });
+};
