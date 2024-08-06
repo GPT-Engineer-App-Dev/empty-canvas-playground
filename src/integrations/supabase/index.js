@@ -21,11 +21,11 @@ const fromSupabase = async (query) => {
 
 ### items
 
-| name       | type                     | format | required |
-|------------|--------------------------|--------|----------|
-| id         | int8                     | number | true     |
-| created_at | timestamp with time zone | string | true     |
-| name       | text                     | string | false    |
+| name    | type   | format | required |
+|---------|--------|--------|----------|
+| id      | int8   | number | true     |
+| name    | text   | string | true     |
+| created_at | timestamptz | string | true |
 
 */
 
@@ -33,12 +33,7 @@ const fromSupabase = async (query) => {
 
 export const useItems = () => useQuery({
     queryKey: ['items'],
-    queryFn: () => fromSupabase(supabase.from('items').select('*'))
-});
-
-export const useItem = (id) => useQuery({
-    queryKey: ['items', id],
-    queryFn: () => fromSupabase(supabase.from('items').select('*').eq('id', id).single())
+    queryFn: () => fromSupabase(supabase.from('items').select('*')),
 });
 
 export const useAddItem = () => {
