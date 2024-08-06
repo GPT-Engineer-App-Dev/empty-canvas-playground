@@ -1,1 +1,1 @@
-{"code":"PGRST100","details":"unexpected \"e\" expecting \"not\" or operator (eq, gt, ...)","hint":null,"message":"\"failed to parse filter (eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS1kZW1vIiwicm9sZSI6ImFub24iLCJleHAiOjE5ODM4MTI5OTZ9.CRXP1A7WOeoJeXxjNni43kdQwgnWNReilDMblYTn_I0)\" (line 1, column 1)"}
+{"message":"No API key found in request","hint":"No `apikey` request header or url param was found."}
