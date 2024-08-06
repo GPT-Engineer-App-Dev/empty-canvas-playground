@@ -19,49 +19,61 @@ const fromSupabase = async (query) => {
 
 /* supabase integration types
 
-### items
+### flights
 
-| name    | type   | format | required |
-|---------|--------|--------|----------|
-| id      | int8   | number | true     |
-| name    | text   | string | true     |
-| created_at | timestamptz | string | true |
+| name               | type                     | format | required |
+|--------------------|--------------------------|--------|----------|
+| id                 | int8                     | number | true     |
+| created_at         | timestamp with time zone | string | true     |
+| flight_number      | text                     | string | true     |
+| departure_airport  | text                     | string | true     |
+| arrival_airport    | text                     | string | true     |
+| departure_time     | timestamp with time zone | string | true     |
+| arrival_time       | timestamp with time zone | string | true     |
+| airline            | text                     | string | true     |
+| status             | text                     | string | true     |
 
 */
 
-// Hooks for items table
+// Hooks for flights table
 
-export const useItems = () => useQuery({
-    queryKey: ['items'],
-    queryFn: () => fromSupabase(supabase.from('items').select('*')),
+export const useFlights = () => useQuery({
+    queryKey: ['flights'],
+    queryFn: () => fromSupabase(supabase.from('flights').select('*'))
 });
 
-export const useAddItem = () => {
+export const useFlightById = (id) => useQuery({
+    queryKey: ['flights', id],
+    queryFn: () => fromSupabase(supabase.from('flights').select('*').eq('id', id).single()),
+    enabled: !!id
+});
+
+export const useAddFlight = () => {
     const queryClient = useQueryClient();
     return useMutation({
-        mutationFn: (newItem) => fromSupabase(supabase.from('items').insert([newItem])),
+        mutationFn: (newFlight) => fromSupabase(supabase.from('flights').insert([newFlight])),
         onSuccess: () => {
-            queryClient.invalidateQueries('items');
+            queryClient.invalidateQueries('flights');
         },
     });
 };
 
-export const useUpdateItem = () => {
+export const useUpdateFlight = () => {
     const queryClient = useQueryClient();
     return useMutation({
-        mutationFn: ({ id, ...updateData }) => fromSupabase(supabase.from('items').update(updateData).eq('id', id)),
+        mutationFn: ({ id, ...updateData }) => fromSupabase(supabase.from('flights').update(updateData).eq('id', id)),
         onSuccess: () => {
-            queryClient.invalidateQueries('items');
+            queryClient.invalidateQueries('flights');
         },
     });
 };
 
-export const useDeleteItem = () => {
+export const useDeleteFlight = () => {
     const queryClient = useQueryClient();
     return useMutation({
-        mutationFn: (id) => fromSupabase(supabase.from('items').delete().eq('id', id)),
+        mutationFn: (id) => fromSupabase(supabase.from('flights').delete().eq('id', id)),
         onSuccess: () => {
-            queryClient.invalidateQueries('items');
+            queryClient.invalidateQueries('flights');
         },
     });
 };
