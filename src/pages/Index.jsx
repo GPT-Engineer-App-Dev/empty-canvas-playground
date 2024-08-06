@@ -22,6 +22,7 @@ const Index = () => {
 
   return (
     <div className="w-full h-screen overflow-hidden">
+      Hellow world
       <canvas
         ref={canvasRef}
         className="w-full h-full"
