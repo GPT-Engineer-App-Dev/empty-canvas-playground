@@ -68,11 +68,12 @@ const Index = () => {
           <TableRow>
             <TableHead>ID</TableHead>
             <TableHead>Name</TableHead>
+            <TableHead>Created At</TableHead>
             <TableHead>Actions</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
-          {items.map((item) => (
+          {items && items.map((item) => (
             <TableRow key={item.id}>
               <TableCell>{item.id}</TableCell>
               <TableCell>
@@ -85,6 +86,7 @@ const Index = () => {
                   item.name
                 )}
               </TableCell>
+              <TableCell>{new Date(item.created_at).toLocaleString()}</TableCell>
               <TableCell>
                 {editingItem && editingItem.id === item.id ? (
                   <Button onClick={handleUpdateItem}>Save</Button>
