@@ -23,7 +23,7 @@ const Index = () => {
   const deleteFlight = useDeleteFlight();
 
   const handleAddFlight = () => {
-    if (Object.values(newFlight).every(val => val.trim())) {
+    if (Object.values(newFlight).every(val => val !== null && val !== undefined && val.toString().trim() !== '')) {
       addFlight.mutate(newFlight, {
         onSuccess: () => {
           setNewFlight({
@@ -43,7 +43,7 @@ const Index = () => {
   };
 
   const handleUpdateFlight = () => {
-    if (editingFlight && Object.values(editingFlight).every(val => val.trim())) {
+    if (editingFlight && Object.values(editingFlight).every(val => val !== null && val !== undefined && val.toString().trim() !== '')) {
       updateFlight.mutate(editingFlight, {
         onSuccess: () => {
           setEditingFlight(null);
